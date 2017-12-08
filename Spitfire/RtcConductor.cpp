@@ -15,8 +15,6 @@ using cricket::FakeWebRtcVideoEncoderFactory;
 
 namespace Spitfire
 {
-
-
 	RtcConductor::RtcConductor()
 	{
 		onError = nullptr;
@@ -60,14 +58,13 @@ namespace Spitfire
 			}
 			dataObservers.empty();
 		}
+
 		serverConfigs.clear();
 
 		network_thread_->Stop();
 		worker_thread_->Stop();
 		signaling_thread_->Stop();
 		rtc::Thread::Current()->Stop();
-
-
 	}
 
 	bool RtcConductor::InitializePeerConnection()

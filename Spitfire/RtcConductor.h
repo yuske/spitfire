@@ -10,7 +10,6 @@
 
 namespace Spitfire
 {
-
 	struct ProcessingThread {
 		std::unique_ptr<rtc::Thread> thread;
 		rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> factory;

@@ -462,8 +462,6 @@ namespace Spitfire
 				if (m_isDisposed)
 					return;
 
-				
-
 				// dispose managed data
 				FreeGCHandle(onErrorHandle);
 				FreeGCHandle(onSuccessHandle);
@@ -472,12 +470,14 @@ namespace Spitfire
 				FreeGCHandle(onDataMessageHandle);
 				FreeGCHandle(onDataBinaryMessageHandle);
 				FreeGCHandle(onDataChannelStateHandle);
-				if (_conductor != nullptr)
-				{
-					_conductor->DeletePeerConnection();
-				}
 
-				this->!SpitfireRtc(); // call finalizer
+				// temparary fix of Access Violation
+				// must dispose this obj from the created own thread
+				if (_conductor != NULL)
+				{
+					delete _conductor;
+					_conductor = NULL;
+				}
 
 				m_isDisposed = true;
 			}
@@ -646,12 +646,17 @@ namespace Spitfire
 
 			!SpitfireRtc()
 			{
+				// must delete the obj from right thread currently, 
+				// not from the finalizer thread
+/*
 				// free unmanaged data
 				if (_conductor != NULL)
 				{
 					delete _conductor;
 				}
+
 				_conductor = NULL;
+*/
 			}
 		};
 	}
