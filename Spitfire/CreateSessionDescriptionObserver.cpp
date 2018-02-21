@@ -1,5 +1,3 @@
-
-
 #include "CreateSessionDescriptionObserver.h"
 #include "RtcConductor.h"
 
@@ -32,7 +30,7 @@ void Spitfire::Observers::CreateSessionDescriptionObserver::OnSuccess(webrtc::Se
 
 void Spitfire::Observers::CreateSessionDescriptionObserver::OnFailure(const std::string & error)
 {
-	LOG(LERROR) << error;
+	RTC_LOG(LERROR) << error;
 	if (_manager->onFailure != nullptr)
 	{
 		_manager->onFailure(error.c_str());

@@ -180,6 +180,7 @@
   <ItemGroup>
     <ClCompile Include="CreateSessionDescriptionObserver.cpp" />
     <ClCompile Include="DataChannelObserver.cpp" />
+    <ClCompile Include="fakeaudiocapturemodule.cc" />
     <ClCompile Include="PeerConnectionObserver.cpp" />
     <ClCompile Include="RtcConductor.cpp" />
     <ClCompile Include="RtcUtils.cpp" />

@@ -68,5 +68,8 @@
     <ClCompile Include="SpitfireRtc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fakeaudiocapturemodule.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

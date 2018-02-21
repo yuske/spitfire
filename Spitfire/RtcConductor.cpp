@@ -1,11 +1,13 @@
-
-
 #include "RtcConductor.h"
 
-#include "webrtc/media/engine/fakewebrtcvideoengine.h";
-#include "webrtc/media/engine/webrtcmediaengine.h"
-#include "webrtc/pc/test/fakeaudiocapturemodule.h"
-#include "webrtc/api/test/fakeconstraints.h"
+#include "api/audio_codecs/builtin_audio_encoder_factory.h"
+#include "api/audio_codecs/builtin_audio_decoder_factory.h"
+
+#include "media/engine/fakewebrtcvideoengine.h"
+#include "media/engine/webrtcmediaengine.h"
+#include "pc/test/fakeaudiocapturemodule.h"
+#include "api/test/fakeconstraints.h"
+
 #include <iostream>
 
 using cricket::MediaEngineInterface;
@@ -83,7 +85,13 @@ namespace Spitfire
 		worker_thread_->Start();
 		signaling_thread_->Start();
 
-		pc_factory_ = webrtc::CreatePeerConnectionFactory(network_thread_, worker_thread_, signaling_thread_, FakeAudioCaptureModule::Create(),
+		pc_factory_ = webrtc::CreatePeerConnectionFactory(
+			network_thread_, 
+			worker_thread_, 
+			signaling_thread_, 
+			FakeAudioCaptureModule::Create(),
+			webrtc::CreateBuiltinAudioEncoderFactory(),
+			webrtc::CreateBuiltinAudioDecoderFactory(),
 			new FakeWebRtcVideoEncoderFactory(),
 			new FakeWebRtcVideoDecoderFactory());
 
@@ -164,7 +172,7 @@ namespace Spitfire
 		webrtc::SessionDescriptionInterface* session_description(webrtc::CreateSessionDescription(type, sdp, &error));
 		if (!session_description)
 		{
-			LOG(WARNING) << "Can't parse received session description message. " << "SdpParseError was: " << error.description;
+			RTC_LOG(WARNING) << "Can't parse received session description message. " << "SdpParseError was: " << error.description;
 			return;
 		}
 		peerObserver->peerConnection->SetRemoteDescription(setSessionObserver, session_description);
@@ -179,7 +187,7 @@ namespace Spitfire
 		webrtc::SessionDescriptionInterface* session_description(webrtc::CreateSessionDescription("offer", sdp, &error));
 		if (!session_description)
 		{
-			LOG(WARNING) << "Can't parse received session description message. " << "SdpParseError was: " << error.description;
+			RTC_LOG(WARNING) << "Can't parse received session description message. " << "SdpParseError was: " << error.description;
 			return;
 		}
 		peerObserver->peerConnection->SetRemoteDescription(setSessionObserver, session_description);
@@ -199,8 +207,7 @@ namespace Spitfire
 		webrtc::IceCandidateInterface * candidate = webrtc::CreateIceCandidate(sdp_mid, sdp_mlineindex, sdp, &error);
 		if (!candidate)
 		{
-			LOG(WARNING) << "Can't parse received candidate message. "
-				<< "SdpParseError was: " << error.description;
+			RTC_LOG(WARNING) << "Can't parse received candidate message. " << "SdpParseError was: " << error.description;
 			return false;
 		}
 
@@ -209,7 +216,7 @@ namespace Spitfire
 
 		if (!peerObserver->peerConnection->AddIceCandidate(candidate))
 		{
-			LOG(WARNING) << "Failed to apply the received candidate";
+			RTC_LOG(WARNING) << "Failed to apply the received candidate";
 			return false;
 		}
 		return true;

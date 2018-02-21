@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "webrtc/api/peerconnectioninterface.h"
-#include "webrtc/api/jsep.h"
+#include "api/peerconnectioninterface.h"
+#include "api/jsep.h"
 
 
 
@@ -22,13 +22,14 @@ namespace Spitfire {
 			explicit CreateSessionDescriptionObserver(RtcConductor* manager);
 			~CreateSessionDescriptionObserver();
 
-			int AddRef() const override
+			void AddRef() const override
 			{
-				return 0;
+				//return 0;
 			};
-			int Release() const override
+
+			rtc::RefCountReleaseStatus Release() const override
 			{
-				return 0;
+				return rtc::RefCountReleaseStatus::kDroppedLastRef;
 			};
 
 		private:

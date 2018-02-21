@@ -1,5 +1,5 @@
 #pragma once
-#include "webrtc/api/jsep.h"
+#include "api/jsep.h"
 
 namespace Spitfire {
 
@@ -17,13 +17,14 @@ namespace Spitfire {
 			 void OnSuccess() override;
 			 void OnFailure(const std::string& error) override;
 
-			int AddRef() const override
+			void AddRef() const override
 			{
-				return 0;
+				//return 0;
 			};
-			int Release() const override
+
+			rtc::RefCountReleaseStatus Release() const override
 			{
-				return 0;
+				return rtc::RefCountReleaseStatus::kDroppedLastRef;
 			};
 
 		private:
